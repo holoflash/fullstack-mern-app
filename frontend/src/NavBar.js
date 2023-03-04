@@ -13,10 +13,13 @@ const NavBar = () => {
                     <Link to="/">Home</Link>
                 </li>
                 <li>
-                    <Link to="/about">About</Link>
+                    <Link to="/soundtrack_aor">SOUNDTRACK AOR</Link>
                 </li>
                 <li>
-                    <Link to="/articles">Articles</Link>
+                    <Link to="/popwave">Popwave</Link>
+                </li>
+                <li>
+                    <Link to="/80s_90s_jazz_fusion">80s & 90s Jazz Fusion/Smooth Jazz</Link>
                 </li>
             </ul>
             <div className="nav-right">

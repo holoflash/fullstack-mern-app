@@ -21,8 +21,6 @@ h4 {
 nav {
     border-bottom: 4px solid black;
     text-align: center;
-    position: fixed;
-    top: 0;
     width: 100%;
     background: white;
 }
@@ -111,7 +109,7 @@ p {
 }
 
 .nav-right {
-    position: absolute;
-    top: 8px;
+    position: fixed;
+    bottom: 8px;
     right: 8px;
 }
