@@ -1,8 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import useUser from '../hooks/useUser';
 
-const AddSuggestionForm = ({ suggestionName, onSuggestionUpdated }) => {
+const AddSuggestionForm = ({ playlistName, }) => {
     const [name, setName] = useState('');
     const [suggestionText, setSuggestionText] = useState('');
     const { user } = useUser();
@@ -11,17 +11,17 @@ const AddSuggestionForm = ({ suggestionName, onSuggestionUpdated }) => {
         const token = user && (await user.getIdToken());
         const headers = token ? { authtoken: token } : {};
         const response = await axios.post(
-            `/api/suggestions/${suggestionName}/suggestions`,
+            `/api/playlists/${playlistName}/suggestions`,
             {
-                postedBy: name,
-                text: suggestionText,
+                suggestion: suggestionText,
+                user: name,
             },
             {
                 headers,
             }
         );
-        const updatedSuggestion = response.data;
-        onSuggestionUpdated(updatedSuggestion);
+        // const updatedSuggestions = response.data;
+        // onSuggestionUpdated(updatedSuggestions);
         setName('');
         setSuggestionText('');
     };
