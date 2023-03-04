@@ -40,18 +40,15 @@ app.use(async (req, res, next) => {
     next();
 });
 
-app.get('/api/articles/:name', async (req, res) => {
-    const { name } = req.params;
-    const { uid } = req.user;
+//Get a specific playlist
+app.get('/api/playlists/:playlist', async (req, res) => {
+    const { playlist } = req.params;
+    const result = await db.collection('playlists').findOne({ [playlist]: { $exists: true } });
 
-    const article = await db.collection('articles').findOne({ name });
-
-    if (article) {
-        const upvoteIds = article.upvoteIds || [];
-        article.canUpvote = uid && !upvoteIds.includes(uid);
-        res.json(article);
+    if (result) {
+        res.json(result[playlist].suggestions);
     } else {
-        res.sendStatus(404);
+        res.status(404).json({ errorCode: 404, message: 'Playlist not found' });
     }
 });
 
