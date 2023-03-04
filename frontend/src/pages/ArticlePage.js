@@ -5,7 +5,6 @@ import NotFoundPage from './NotFoundPage';
 import CommentsList from '../components/CommentsList';
 import AddCommentForm from '../components/AddCommentForm';
 import useUser from '../hooks/useUser';
-import articles from './article-content';
 
 const ArticlePage = () => {
     const [articleInfo, setArticleInfo] = useState({ upvotes: 0, comments: [], canUpvote: false });
@@ -28,7 +27,9 @@ const ArticlePage = () => {
         }
     }, [isLoading, user]);
 
-    const article = articles.find(article => article.name === articleId);
+    //Replace articles with specific suggestion?
+    // const article = articles.find(article => article.name === articleId);
+    const article = "placeholder"
 
     const addUpvote = async () => {
         const token = user && await user.getIdToken();

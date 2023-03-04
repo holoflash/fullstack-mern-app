@@ -10,6 +10,10 @@ import CreateAccountPage from './pages/CreateAccountPage';
 import SoundtrackAor from './pages/SoundtrackAor'
 import JazzFusion from './pages/JazzFusion'
 
+console.log = function () { };
+console.warn = function () { };
+console.error = function () { };
+
 function App() {
   return (
     <BrowserRouter>
