@@ -1,9 +1,9 @@
-import PlaylistPage from "../components/PlaylistPage";
+import Playlist from "../components/Playlist";
 
 const JazzFusion = () => {
 
     return (
-        <PlaylistPage
+        <Playlist
             playlistName="jazz-fusion"
             playlistDescription="another banger"
             playlistUrl={"a temp one"} />

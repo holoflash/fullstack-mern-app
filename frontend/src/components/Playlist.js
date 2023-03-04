@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import AddSuggestionForm from './AddSuggestionForm';
 
-const PlaylistPage = ({ playlistName, playlistDescription, playlistUrl }) => {
+const Playlist = ({ playlistName, playlistDescription, playlistUrl }) => {
     const [suggestions, setSuggestions] = useState([]);
 
     useEffect(() => {
@@ -10,7 +11,7 @@ const PlaylistPage = ({ playlistName, playlistDescription, playlistUrl }) => {
             setSuggestions(response.data);
         }
         fetchSuggestions();
-    }, [playlistUrl]);
+    }, []);
 
     return (
         <>
@@ -25,8 +26,9 @@ const PlaylistPage = ({ playlistName, playlistDescription, playlistUrl }) => {
                     </li>
                 ))}
             </ul>
+            <AddSuggestionForm />
         </>
     );
 }
 
-export default PlaylistPage;
+export default Playlist;

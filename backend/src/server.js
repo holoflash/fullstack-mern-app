@@ -4,8 +4,9 @@ import admin from 'firebase-admin';
 import express from 'express';
 import 'dotenv/config';
 import { db, connectToDb } from './db.js';
-
 import { fileURLToPath } from 'url';
+import { ObjectId } from 'mongodb';
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -34,7 +35,6 @@ app.use(async (req, res, next) => {
             return res.sendStatus(400);
         }
     }
-
     req.user = req.user || {};
 
     next();
@@ -52,6 +52,7 @@ app.get('/api/playlists/:playlist', async (req, res) => {
     }
 });
 
+//Is user logged in?
 app.use((req, res, next) => {
     if (req.user) {
         next();
@@ -60,44 +61,40 @@ app.use((req, res, next) => {
     }
 });
 
-app.put('/api/articles/:name/upvote', async (req, res) => {
+
+//Add a suggestion
+app.post('/api/playlists/:name/suggestions', async (req, res) => {
     const { name } = req.params;
-    const { uid } = req.user;
+    const { suggestion, user } = req.body;
+    const id = suggestion + user
 
-    const article = await db.collection('articles').findOne({ name });
+    await db.collection('playlists').updateOne({ [`${name}.suggestions`]: { $exists: true } }, {
+        $push: { [`${name}.suggestions`]: { _id: id, suggestion: suggestion, user, upvotes: 0 } },
+    });
 
-    if (article) {
-        const upvoteIds = article.upvoteIds || [];
-        const canUpvote = uid && !upvoteIds.includes(uid);
+    const result = await db.collection('playlists').findOne({ [`${name}.suggestions._id`]: id });
 
-        if (canUpvote) {
-            await db.collection('articles').updateOne({ name }, {
-                $inc: { upvotes: 1 },
-                $push: { upvoteIds: uid },
-            });
-        }
-
-        const updatedArticle = await db.collection('articles').findOne({ name });
-        res.json(updatedArticle);
+    if (result) {
+        res.json(result[`${name}.suggestions`]);
     } else {
-        res.send('That article doesn\'t exist');
+        res.status(404).json({ errorCode: 404, message: 'Playlist not found' });
     }
 });
 
-app.post('/api/articles/:name/comments', async (req, res) => {
-    const { name } = req.params;
-    const { text } = req.body;
-    const { email } = req.user;
+//Upvote a suggestion
+app.post('/api/playlists/:name/suggestions/:id/upvote', async (req, res) => {
+    const { name, id } = req.params;
 
-    await db.collection('articles').updateOne({ name }, {
-        $push: { comments: { postedBy: email, text } },
+    await db.collection('playlists').updateOne({ [`${name}.suggestions._id`]: id }, {
+        $inc: { [`${name}.suggestions.$.upvotes`]: 1 },
     });
-    const article = await db.collection('articles').findOne({ name });
 
-    if (article) {
-        res.json(article);
+    const result = await db.collection('playlists').findOne({ [`${name}.suggestions._id`]: id });
+
+    if (result) {
+        res.json(result[name].suggestions.find(suggestion => suggestion._id === id));
     } else {
-        res.send('That article doesn\'t exist!');
+        res.status(404).json({ errorCode: 404, message: 'Suggestion not found' });
     }
 });
 
