@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { getAuth, signOut } from "firebase/auth";
 import useUser from './hooks/useUser'
 
@@ -6,6 +6,8 @@ const NavBar = () => {
 
     const { user } = useUser()
     const navigate = useNavigate()
+    const location = useLocation()
+
     return (
         <nav>
             <ul>
@@ -25,7 +27,7 @@ const NavBar = () => {
             <div className="nav-right">
                 {user
                     ? <button onClick={() => { signOut(getAuth()) }}>Log Out</button>
-                    : <button onClick={() => { navigate('/login') }}>Log In</button>
+                    : <button onClick={() => { navigate('/login', { state: { from: location.pathname } }) }}>Log In</button>
                 }
             </div>
         </nav>
