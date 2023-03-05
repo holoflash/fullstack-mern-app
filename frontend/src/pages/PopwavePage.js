@@ -5,8 +5,8 @@ const Popwave = () => {
         <PlaylistPage
             playlistHeader="popwave"
             name="popwave"
-            playlistDescription="another banger"
-            playlistUrl={"a temp one"} />
+            playlistDescription="Melancholy nostalgia and 80s inspired pop, retrowave, indie rock, synthwave, synthpop, hopebeat. LANY, The Midnight, The 1975, Nightly, MUNA, The Bad Dreamers, Ethel Cain --you get the idea :) Carefully curated and updated regularly."
+            playlistUrl="https://open.spotify.com/playlist/36RgZqbsRLfoNmbl3pF8IU?si=2660cad79814471f" />
     );
 }
 

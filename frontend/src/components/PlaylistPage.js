@@ -1,6 +1,7 @@
 import useUser from '../hooks/useUser';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { Spotify } from 'react-spotify-embed'
 
 const PlaylistPage = ({ playlistHeader, name, playlistDescription, playlistUrl }) => {
     const [suggestions, setSuggestions] = useState([]);
@@ -34,7 +35,7 @@ const PlaylistPage = ({ playlistHeader, name, playlistDescription, playlistUrl }
         setSuggestions(response.data);
     }
 
-    const addComment = async () => {
+    const addSuggestion = async () => {
         const token = user && await user.getIdToken();
         const headers = token ? { authtoken: token } : {};
         const response = await axios.post(`/api/playlists/${name}/suggestions`, {
@@ -48,40 +49,48 @@ const PlaylistPage = ({ playlistHeader, name, playlistDescription, playlistUrl }
         setCommentText('');
     }
 
+    const deleteSuggestion = async ({ suggestion }) => {
+        const token = user && await user.getIdToken();
+        const headers = token ? { authtoken: token } : {};
+        const response = await axios.delete(`/api/playlists/${name}/suggestions/${suggestion._id}`, null, { headers, });
+        setSuggestions(response.data);
+    }
+
     return (
         <>
 
             <h1>{playlistHeader}</h1>
             <p>{playlistDescription}</p><br></br>
-            <a href={playlistUrl}>{name}</a>
+            <Spotify link={playlistUrl} />
 
             <h3>Suggestions</h3>
-            <ol>
+            <ul>
                 {suggestions.map((suggestion, i) => (
                     <li key={`${suggestion.user}_${suggestion.suggestion}`}>
                         <h4>{suggestion.suggestion}</h4>
-                        <p>Suggested by:  {suggestion._id}</p>
+                        {/* <p>Suggested by:  {suggestion._id}</p> */}
                         <p>Rating: {suggestion.upvotes}</p>
                         {user
                             ? <div>
                                 <button onClick={() => addUpvote({ suggestion })}>Upvote</button>
                                 <button onClick={() => addDownvote({ suggestion })}>Downvote</button>
+                                <button onClick={() => deleteSuggestion({ suggestion })}>Delete Suggestion</button>
                             </div>
                             : <button>Log in to rate</button>}
                     </li>
 
                 ))}
-            </ol>
+            </ul>
 
             <div id="add-comment-form">
                 <h3>Add a Suggestion</h3>
                 {user && <p>You are posting as {user.email}</p>}
-                <textarea
+                <input type="text"
                     value={suggestionText}
                     onChange={e => setCommentText(e.target.value)}
                     rows="4"
                     cols="50" />
-                <button onClick={addComment}>Add Suggestion</button>
+                <button onClick={addSuggestion}>Add Suggestion</button>
             </div>
         </>
     );

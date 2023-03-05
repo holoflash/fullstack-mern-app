@@ -85,14 +85,15 @@ app.delete('/api/playlists/:name/suggestions/:id', async (req, res) => {
     const { name, id } = req.params;
 
     const result = await db.collection('playlists').updateOne(
-        { [`${name}.suggestions._id`]: id },
-        { $pull: { [`${name}.suggestions`]: { _id: id } } }
+        { [`${name}.suggestions._id`]: new ObjectId(id) },
+        { $pull: { [`${name}.suggestions`]: { _id: new ObjectId(id) } } }
     );
 
-    if (result.modifiedCount === 1) {
-        res.status(204).end();
+    const allSuggestions = await db.collection('playlists').findOne({ [name]: { $exists: true } });
+    if (result) {
+        res.json(allSuggestions[name].suggestions);
     } else {
-        res.status(404).json({ errorCode: 404, message: 'Suggestion not found' });
+        res.status(404).json({ errorCode: 404, message: 'Playlist not found' });
     }
 });
 
