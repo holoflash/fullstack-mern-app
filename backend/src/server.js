@@ -72,9 +72,9 @@ app.post('/api/playlists/:name/suggestions', async (req, res) => {
         $push: { [`${name}.suggestions`]: { _id: id, suggestion: suggestion, user, upvotes: 0 } },
     });
 
-    const result = await db.collection('playlists').findOne({ [`${name}.suggestions._id`]: id });
+    const result = await db.collection('playlists').findOne({ [`${name}.suggestions._id`]: new ObjectId(id) });
     if (result) {
-        res.json(result[`${name}.suggestions`]);
+        res.json(result[name].suggestions);
     } else {
         res.status(404).json({ errorCode: 404, message: 'Playlist not found' });
     }
@@ -105,7 +105,6 @@ app.put('/api/playlists/:name/suggestions/:id/upvote', async (req, res) => {
     });
 
     const result = await db.collection('playlists').findOne({ [`${name}.suggestions._id`]: new ObjectId(id) });
-
     if (result) {
         res.json(result[name].suggestions);
     } else {
@@ -124,7 +123,7 @@ app.put('/api/playlists/:name/suggestions/:id/downvote', async (req, res) => {
 
     const result = await db.collection('playlists').findOne({ [`${name}.suggestions._id`]: new ObjectId(id) });
     if (result) {
-        res.json(result[name].suggestions.find(suggestion => suggestion._id === id));
+        res.json(result[name].suggestions);
     } else {
         res.status(404).json({ errorCode: 404, message: 'Suggestion not found' });
     }
