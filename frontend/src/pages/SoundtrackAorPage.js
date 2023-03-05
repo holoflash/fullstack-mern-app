@@ -1,10 +1,11 @@
-import Playlist from "../components/PlaylistPage";
+import PlaylistPage from "../components/PlaylistPage";
 
 const SoundtrackAor = () => {
 
     return (
-        <Playlist
-            playlistName="soundtrack-aor"
+        <PlaylistPage
+            playlistHeader="SOUNDTRACK AOR"
+            name="soundtrack-aor"
             playlistDescription="another banger"
             playlistUrl={"a temp one"} />
     );

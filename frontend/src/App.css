@@ -53,6 +53,10 @@ nav a:hover {
     max-width: 700px;
     margin: auto;
     padding-top: 72px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
 }
 
 .article-list-item {

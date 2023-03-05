@@ -5,6 +5,7 @@ import express from 'express';
 import 'dotenv/config';
 import { db, connectToDb } from './db.js';
 import { fileURLToPath } from 'url';
+import { ObjectId } from 'mongodb';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -65,7 +66,7 @@ app.use((req, res, next) => {
 app.post('/api/playlists/:name/suggestions', async (req, res) => {
     const { name } = req.params;
     const { suggestion, user } = req.body;
-    const id = suggestion + user
+    const id = new ObjectId();
 
     await db.collection('playlists').updateOne({ [`${name}.suggestions`]: { $exists: true } }, {
         $push: { [`${name}.suggestions`]: { _id: id, suggestion: suggestion, user, upvotes: 0 } },
@@ -99,27 +100,29 @@ app.delete('/api/playlists/:name/suggestions/:id', async (req, res) => {
 app.put('/api/playlists/:name/suggestions/:id/upvote', async (req, res) => {
     const { name, id } = req.params;
 
-    await db.collection('playlists').updateOne({ [`${name}.suggestions._id`]: id }, {
+    await db.collection('playlists').updateOne({ [`${name}.suggestions._id`]: new ObjectId(id) }, {
         $inc: { [`${name}.suggestions.$.upvotes`]: 1 },
     });
 
-    const result = await db.collection('playlists').findOne({ [`${name}.suggestions._id`]: id });
+    const result = await db.collection('playlists').findOne({ [`${name}.suggestions._id`]: new ObjectId(id) });
+
     if (result) {
-        res.json(result[name].suggestions.find(suggestion => suggestion._id === id));
+        res.json(result[name].suggestions);
     } else {
         res.status(404).json({ errorCode: 404, message: 'Suggestion not found' });
     }
 });
 
+
 //Downvote a suggestion
 app.put('/api/playlists/:name/suggestions/:id/downvote', async (req, res) => {
     const { name, id } = req.params;
 
-    await db.collection('playlists').updateOne({ [`${name}.suggestions._id`]: id }, {
+    await db.collection('playlists').updateOne({ [`${name}.suggestions._id`]: new ObjectId(id) }, {
         $inc: { [`${name}.suggestions.$.upvotes`]: -1 },
     });
 
-    const result = await db.collection('playlists').findOne({ [`${name}.suggestions._id`]: id });
+    const result = await db.collection('playlists').findOne({ [`${name}.suggestions._id`]: new ObjectId(id) });
     if (result) {
         res.json(result[name].suggestions.find(suggestion => suggestion._id === id));
     } else {

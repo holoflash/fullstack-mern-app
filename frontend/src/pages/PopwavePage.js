@@ -1,9 +1,10 @@
-import Playlist from "../components/PlaylistPage";
+import PlaylistPage from "../components/PlaylistPage";
 
 const Popwave = () => {
     return (
-        <Playlist
-            playlistName="popwave"
+        <PlaylistPage
+            playlistHeader="popwave"
+            name="popwave"
             playlistDescription="another banger"
             playlistUrl={"a temp one"} />
     );

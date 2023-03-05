@@ -9,10 +9,6 @@ import SoundtrackAorPage from './pages/SoundtrackAorPage'
 import PopwavePage from './pages/PopwavePage';
 import JazzFusionPage from './pages/JazzFusionPage'
 
-console.log = function () { };
-console.warn = function () { };
-console.error = function () { };
-
 function App() {
   return (
     <BrowserRouter>
