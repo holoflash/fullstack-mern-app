@@ -5,7 +5,6 @@ import express from 'express';
 import 'dotenv/config';
 import { db, connectToDb } from './db.js';
 import { fileURLToPath } from 'url';
-import { ObjectId } from 'mongodb';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -13,6 +12,7 @@ const __dirname = path.dirname(__filename);
 const credentials = JSON.parse(
     fs.readFileSync('./credentials.json')
 );
+
 admin.initializeApp({
     credential: admin.credential.cert(credentials),
 });
@@ -27,7 +27,6 @@ app.get(/^(?!\/api).+/, (req, res) => {
 
 app.use(async (req, res, next) => {
     const { authtoken } = req.headers;
-
     if (authtoken) {
         try {
             req.user = await admin.auth().verifyIdToken(authtoken);
@@ -36,9 +35,9 @@ app.use(async (req, res, next) => {
         }
     }
     req.user = req.user || {};
-
     next();
 });
+
 
 //Get a specific playlist
 app.get('/api/playlists/:playlist', async (req, res) => {
@@ -52,6 +51,7 @@ app.get('/api/playlists/:playlist', async (req, res) => {
     }
 });
 
+
 //Is user logged in?
 app.use((req, res, next) => {
     if (req.user) {
@@ -60,7 +60,6 @@ app.use((req, res, next) => {
         res.sendStatus(401);
     }
 });
-
 
 //Add a suggestion
 app.post('/api/playlists/:name/suggestions', async (req, res) => {
@@ -73,7 +72,6 @@ app.post('/api/playlists/:name/suggestions', async (req, res) => {
     });
 
     const result = await db.collection('playlists').findOne({ [`${name}.suggestions._id`]: id });
-
     if (result) {
         res.json(result[`${name}.suggestions`]);
     } else {
@@ -81,8 +79,24 @@ app.post('/api/playlists/:name/suggestions', async (req, res) => {
     }
 });
 
+//Delete a suggestion
+app.delete('/api/playlists/:name/suggestions/:id', async (req, res) => {
+    const { name, id } = req.params;
+
+    const result = await db.collection('playlists').updateOne(
+        { [`${name}.suggestions._id`]: id },
+        { $pull: { [`${name}.suggestions`]: { _id: id } } }
+    );
+
+    if (result.modifiedCount === 1) {
+        res.status(204).end();
+    } else {
+        res.status(404).json({ errorCode: 404, message: 'Suggestion not found' });
+    }
+});
+
 //Upvote a suggestion
-app.post('/api/playlists/:name/suggestions/:id/upvote', async (req, res) => {
+app.put('/api/playlists/:name/suggestions/:id/upvote', async (req, res) => {
     const { name, id } = req.params;
 
     await db.collection('playlists').updateOne({ [`${name}.suggestions._id`]: id }, {
@@ -90,7 +104,22 @@ app.post('/api/playlists/:name/suggestions/:id/upvote', async (req, res) => {
     });
 
     const result = await db.collection('playlists').findOne({ [`${name}.suggestions._id`]: id });
+    if (result) {
+        res.json(result[name].suggestions.find(suggestion => suggestion._id === id));
+    } else {
+        res.status(404).json({ errorCode: 404, message: 'Suggestion not found' });
+    }
+});
 
+//Downvote a suggestion
+app.put('/api/playlists/:name/suggestions/:id/downvote', async (req, res) => {
+    const { name, id } = req.params;
+
+    await db.collection('playlists').updateOne({ [`${name}.suggestions._id`]: id }, {
+        $inc: { [`${name}.suggestions.$.upvotes`]: -1 },
+    });
+
+    const result = await db.collection('playlists').findOne({ [`${name}.suggestions._id`]: id });
     if (result) {
         res.json(result[name].suggestions.find(suggestion => suggestion._id === id));
     } else {
