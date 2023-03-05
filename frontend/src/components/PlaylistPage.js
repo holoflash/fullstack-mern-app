@@ -63,7 +63,7 @@ const PlaylistPage = ({ playlistHeader, name, playlistDescription, playlistUrl }
             <p>{playlistDescription}</p><br></br>
             <Spotify link={playlistUrl} />
 
-            <h3>Suggestions</h3>
+            {suggestions && <h3>Suggestions</h3>}
             <ul>
                 {suggestions.map((suggestion, i) => (
                     <li key={`${suggestion.user}_${suggestion.suggestion}`}>
@@ -82,16 +82,18 @@ const PlaylistPage = ({ playlistHeader, name, playlistDescription, playlistUrl }
                 ))}
             </ul>
 
-            <div id="add-comment-form">
-                <h3>Add a Suggestion</h3>
-                {user && <p>You are posting as {user.email}</p>}
-                <input type="text"
-                    value={suggestionText}
-                    onChange={e => setCommentText(e.target.value)}
-                    rows="4"
-                    cols="50" />
-                <button onClick={addSuggestion}>Add Suggestion</button>
-            </div>
+
+            {user &&
+                <div id="add-comment-form">
+                    <h3>Add a Suggestion</h3>
+                    <p>You are posting as {user.email}</p>
+                    <input type="text"
+                        value={suggestionText}
+                        onChange={e => setCommentText(e.target.value)}
+                        rows="4"
+                        cols="50" />
+                    <button onClick={addSuggestion}>Add Suggestion</button>
+                </div>}
         </>
     );
 };
