@@ -1,4 +1,4 @@
-import PlaylistPage from "../components/PlaylistPage";
+import PlaylistPage from "./PlaylistPage";
 import SoundtrackImg from "../assets/soundtrack.jpg"
 
 const SoundtrackAor = () => {

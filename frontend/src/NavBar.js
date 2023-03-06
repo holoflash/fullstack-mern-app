@@ -12,24 +12,22 @@ const NavBar = () => {
         <nav>
             <ul>
                 <li>
-                    <Link to="/">Home</Link>
+                    <Link to="/">⌂</Link>
                 </li>
                 <li>
                     <Link to="/soundtrack_aor">SOUNDTRACK AOR</Link>
                 </li>
                 <li>
-                    <Link to="/popwave">Popwave</Link>
+                    <Link to="/popwave">popwave</Link>
                 </li>
                 <li>
                     <Link to="/80s_90s_jazz_fusion">80s & 90s Jazz Fusion/Smooth Jazz</Link>
                 </li>
-            </ul>
-            <div className="nav-right">
                 {user
                     ? <button onClick={() => { signOut(getAuth()) }}>Log Out</button>
                     : <button onClick={() => { navigate('/login', { state: { from: location.pathname } }) }}>Log In</button>
                 }
-            </div>
+            </ul>
         </nav>
     );
 }

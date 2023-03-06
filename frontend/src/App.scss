@@ -1,0 +1,184 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed&display=swap');
+
+$primary-color: #355070;
+$font-color: white;
+$splash3: #6d597a;
+$maintext: min(1.5vh, 3vw);
+
+@mixin width {
+    width: 80vw;
+    max-width: 700px;
+}
+
+@mixin button {
+    all: unset;
+    padding: 1rem;
+    outline: solid $splash3 1px;
+    cursor: pointer;
+    background-color: $primary-color;
+    color: $font-color;
+    transition: background-color 0.3s ease;
+    text-align: center;
+    text-transform: uppercase;
+    font-weight: 900;
+    &:hover {
+        background-color: $splash3;
+    }
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body,
+html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    background-color: $primary-color;
+    font-family: 'Roboto Condensed', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    color: $font-color;
+}
+
+nav {
+    outline: solid $splash3 1px;
+    background-color: $primary-color;
+    text-align: center;
+    padding: 1rem 2rem;
+    margin: 0;
+
+    ul {
+        list-style-type: none;
+    }
+
+    li {
+        display: inline-block;
+        padding: 1em;
+    }
+
+    a {
+        text-decoration: none;
+        color: $font-color;
+        font-weight: bold;
+        padding: 1em 32px;
+    }
+    a:hover {
+        background: $splash3;
+    }
+    button {
+        all: unset;
+        padding: 1rem;
+        outline: solid $splash3 1px;
+        cursor: pointer;
+        &:hover {
+            background-color: $splash3;
+        }
+    }
+}
+
+.playlist-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+
+    h1 {
+        font-size: 5vh;
+        color: $font-color;
+        text-align: center;
+        width: 80vw;
+        margin: 0;
+    }
+
+    img {
+        @include width();
+        border: 1px solid $splash3;
+    }
+
+    p {
+        font-size: $maintext;
+        @include width();
+        text-align: justify;
+    }
+}
+
+table {
+    border-collapse: collapse;
+    @include width();
+    th,
+    td {
+        border: 1px solid $splash3;
+        padding: 20px;
+        text-align: center;
+        cursor: pointer;
+    }
+
+    th {
+        background-color: $splash3;
+    }
+
+    td:last-child {
+        text-align: center;
+
+        button {
+            @include button();
+            padding: 0;
+            height: 20px;
+            width: 20px;
+            &:last-child {
+                margin-right: 0;
+            }
+        }
+    }
+}
+
+#add-suggestion-form {
+    @include width();
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-rows: 1fr 20% 20% 1fr;
+
+    h3 {
+        font-size: 3vh;
+        grid-row-start: 1;
+        grid-row-end: 1;
+        justify-self: center;
+    }
+    input {
+        display: block;
+        padding: 8px;
+        border-radius: 8px;
+        font-size: 18px;
+        border: 2px solid black;
+        margin-bottom: 16px;
+        grid-row-start: 2;
+        grid-row-end: 2;
+        grid-column-start: 1;
+        grid-column-end: 1;
+    }
+    .input-count {
+        display: block;
+        font-size: 15px;
+        justify-self: end;
+        grid-row-start: 2;
+        grid-row-end: 2;
+        grid-column-start: 1;
+        grid-column-end: 1;
+        color: $primary-color;
+        padding-right: 9px;
+        padding-top: 16px;
+    }
+
+    button {
+        @include width();
+        @include button();
+    }
+    p {
+        justify-self: center;
+        font-size: 1.5vh;
+        font-style: italic;
+    }
+}
