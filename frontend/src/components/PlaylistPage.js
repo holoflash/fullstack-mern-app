@@ -1,9 +1,8 @@
 import useUser from '../hooks/useUser';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Spotify } from 'react-spotify-embed'
 
-const PlaylistPage = ({ playlistHeader, name, playlistDescription, playlistUrl }) => {
+const PlaylistPage = ({ playlistHeader, name, playlistDescription, playlistUrl, playlistImg }) => {
     const [suggestions, setSuggestions] = useState([]);
     const [suggestionText, setCommentText] = useState('');
     const [userName, setUserName] = useState('');
@@ -61,8 +60,12 @@ const PlaylistPage = ({ playlistHeader, name, playlistDescription, playlistUrl }
 
             <h1>{playlistHeader}</h1>
             <p>{playlistDescription}</p><br></br>
-            <Spotify link={playlistUrl} />
-
+            <a href={playlistUrl}>
+                <img
+                    src={playlistImg}
+                    alt={playlistHeader + " cover"}
+                    height={500}
+                /></a>
             {suggestions && <h3>Suggestions</h3>}
             <ul>
                 {suggestions.map((suggestion, i) => (
