@@ -1,48 +1,8 @@
 const HomePage = () => (
-    <div className="playlist-container">
+    <div className="container">
         <h1>Hello!</h1>
         <p>
-            Do your thing
-            wefwef
-            wefwefwewefwefwef Do your thing
-            wefwef
-            wefwefwewefwefwef
-            Do your thing
-            wefwef
-            wefwefwewefwefwef
-            Do your thing
-            wefwef
-            wefwefwewefwefwef
-            Do your thing
-            wefwef
-            wefwefwewefwefwef
-            Do your thing
-            wefwef
-            wefwefwewefwefwef
-            Do your thing
-            wefwef
-            wefwefwewefwefwef
-            Do your thing
-            wefwef
-            wefwefwewefwefwef
-            Do your thing
-            wefwef
-            wefwefwewefwefwef
-            Do your thing
-            wefwef
-            wefwefwewefwefwef
-            Do your thing
-            wefwef
-            wefwefwewefwefwef
-            Do your thing
-            wefwef
-            wefwefwewefwefwef
-            Do your thing
-            wefwef
-            wefwefwewefwefwef
-            Do your thing
-            wefwef
-            wefwefwewefwefwef
+            Coming soon
         </p>
     </div>
 );

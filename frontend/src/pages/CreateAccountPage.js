@@ -25,8 +25,8 @@ const CreateAccountPage = () => {
     }
 
     return (
-        <>
-            <h1>Create account</h1>
+        <div className='container sign-up'>
+            <h1>SIGN UP</h1>
             {error && <p className='error'>{error}</p>}
             <input
                 placeholder='Your email address'
@@ -45,9 +45,9 @@ const CreateAccountPage = () => {
                 value={confirmPassword}
                 onChange={(e => setConfirmPassword(e.target.value))}
             />
-            <button onClick={createAccount}>Create account</button>
-            <Link to="/login">Already have an account? Log in here</Link>
-        </>
+            <button onClick={createAccount}>SIGN UP</button>
+            <Link className="auth-link" to="/login">Already have an account? Log in here</Link>
+        </div>
     )
 }
 
