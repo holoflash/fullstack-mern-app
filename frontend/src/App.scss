@@ -51,38 +51,34 @@ html {
 nav {
     position: fixed;
     display: flex;
-    justify-content: space-around;
+    justify-content: space-evenly;
     align-items: center;
     flex-direction: row;
+    flex-wrap: wrap;
     background-color: black;
     width: 100vw;
 
-    .nav-section {
+    > * {
+        all: unset;
         display: inline-block;
         text-transform: uppercase;
-    }
-    a {
+        padding-inline: 15px;
+        padding: 15px;
         text-decoration: none;
         color: $font-color;
         font-weight: bold;
-        padding: 1em 32px;
     }
-    a:hover {
+    :hover {
         background: $splash3;
     }
     button {
-        all: unset;
-        padding: 1rem;
-        cursor: pointer;
-        &:hover {
-            background-color: $splash3;
-        }
+        color: $primary-color;
     }
 }
 
 .container {
     width: 100%;
-    margin-top: 80px;
+    padding-top: 50px;
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
@@ -92,8 +88,7 @@ nav {
         font-size: min(50px, 10vw);
         color: $font-color;
         text-align: center;
-        width: 80vw;
-        margin: 0;
+        @include width();
     }
 
     img {
@@ -118,6 +113,12 @@ nav {
         @include width();
         @include button();
         background-color: black;
+    }
+}
+
+@media only screen and (max-width: 736px) {
+    .container {
+        padding-top: 80px;
     }
 }
 
@@ -217,32 +218,6 @@ table {
 .auth-link {
     padding-top: 20px;
     color: lighten($splash3, 10%);
-}
-
-@media only screen and (max-width: 800px) {
-    .container {
-        justify-content: flex-start;
-        margin-top: 120px;
-    }
-    nav {
-        align-items: center;
-        justify-content: space-evenly;
-        flex-wrap: wrap;
-
-        .nav-section {
-            margin: 4px;
-            padding: 5px;
-        }
-        a {
-            padding: 10px;
-        }
-        button {
-            all: unset;
-            cursor: pointer;
-            margin: 4px;
-            padding: 5px;
-        }
-    }
 }
 
 .log-in,

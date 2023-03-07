@@ -2,6 +2,7 @@ import PlaylistPage from "../components/PlaylistPage.js";
 import JazzImg from "../assets/jazz.jpg"
 
 const JazzFusion = () => {
+
     return (
         <PlaylistPage
             playlistHeader="80s & 90s Jazz Fusion/Smooth Jazz"

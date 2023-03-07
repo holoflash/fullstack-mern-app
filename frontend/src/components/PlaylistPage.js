@@ -8,8 +8,8 @@ const PlaylistPage = ({ playlistHeader, name, playlistDescription, playlistUrl, 
     const location = useLocation()
     const [suggestions, setSuggestions] = useState([]);
     const [suggestionText, setSuggestionText] = useState('');
-    const [userName, setUserName] = useState('');
     const { user, isLoading } = useUser();
+    const userName = user.email.substring(0, user.email.indexOf('@'));
 
     useEffect(() => {
         const fetchSuggestions = async () => {
@@ -42,16 +42,16 @@ const PlaylistPage = ({ playlistHeader, name, playlistDescription, playlistUrl, 
         const headers = token ? { authtoken: token } : {};
         const response = await axios.post(`/api/playlists/${name}/suggestions`, {
             suggestion: suggestionText,
-            user: user.email.substring(0, user.email.indexOf('@')),
+            user: userName
         }, {
             headers,
         });
         setSuggestions(response.data);
-        setUserName('');
         setSuggestionText('');
     }
 
     const deleteSuggestion = async ({ suggestion }) => {
+        console.log(suggestion.user)
         const token = user && await user.getIdToken();
         const headers = token ? { authtoken: token } : {};
         const response = await axios.delete(`/api/playlists/${name}/suggestions/${suggestion._id}`, null, { headers, });
@@ -66,7 +66,7 @@ const PlaylistPage = ({ playlistHeader, name, playlistDescription, playlistUrl, 
                 target="_blank">
                 <img
                     src={playlistImg}
-                    alt={playlistHeader + " cover"}
+                    alt={playlistHeader + " artwork"}
                 />
             </a>
 
@@ -88,10 +88,13 @@ const PlaylistPage = ({ playlistHeader, name, playlistDescription, playlistUrl, 
                                 }}>
                                     <div className='action-table hidden'>
                                         {user ? (
+
                                             <div className='actions'>
                                                 <button id="up" onClick={() => addUpvote({ suggestion })}>UPVOTE</button>
                                                 <button id="down" onClick={() => addDownvote({ suggestion })}>DOWNVOTE</button>
-                                                <button id="del" onClick={() => deleteSuggestion({ suggestion })}>X</button>
+                                                {user.email === suggestion.user
+                                                    ? (<button id="del" onClick={() => deleteSuggestion({ suggestion })}>X</button>)
+                                                    : <div></div>}
                                             </div>
                                         ) : (
                                             <button onClick={() => { navigate('/login', { state: { from: location.pathname } }) }}>Log in to rate</button>
@@ -99,7 +102,7 @@ const PlaylistPage = ({ playlistHeader, name, playlistDescription, playlistUrl, 
                                     </div>
                                     {suggestion.suggestion}
                                 </td>
-                                <td>{suggestion.user}</td>
+                                <td>{suggestion.user.substring(0, user.email.indexOf('@'))}</td>
                             </tr>
                         ))}
                     </tbody>
@@ -125,7 +128,7 @@ const PlaylistPage = ({ playlistHeader, name, playlistDescription, playlistUrl, 
                         />
                         <div className='input-count'>{suggestionText.length} / 50</div>
                         <button onClick={addSuggestion}>Add Suggestion</button>
-                        <p>You are posting as <strong>{user.email.substring(0, user.email.indexOf('@'))}</strong></p>
+                        <p>You are posting as <strong>{userName}</strong></p>
                     </div>
 
                     :

@@ -9,22 +9,14 @@ const NavBar = () => {
 
     return (
         <nav>
-            <div className="nav-section">
-                <Link to="/">⌂</Link>
-            </div>
-            <div className="nav-section">
-                <Link to="/soundtrack_aor">SOUNDTRACK AOR</Link>
-            </div>
-            <div className="nav-section">
-                <Link to="/popwave">popwave</Link>
-            </div>
-            <div className="nav-section">
-                <Link to="/80s_90s_jazz_fusion">80s & 90s Jazz Fusion/Smooth Jazz</Link>
-            </div>
             {user
-                ? <button onClick={() => { signOut(getAuth()) }}>LOG OUT</button>
-                : <button onClick={() => { navigate('/login', { state: { from: location.pathname } }) }}>LOG IN</button>
+                ? <button className="login" onClick={() => { signOut(getAuth()) }}>LOG OUT</button>
+                : <button className="login" onClick={() => { navigate('/login', { state: { from: location.pathname } }) }}>LOG IN</button>
             }
+            <Link to="/">⌂</Link>
+            <Link to="/soundtrack_aor">SOUNDTRACK AOR</Link>
+            <Link to="/popwave">popwave</Link>
+            <Link to="/80s_90s_jazz_fusion">80s & 90s Jazz Fusion/Smooth Jazz</Link>
         </nav>
     );
 }
