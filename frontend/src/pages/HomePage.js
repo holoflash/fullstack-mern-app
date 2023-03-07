@@ -1,5 +1,5 @@
 const HomePage = () => (
-    <div className="container">
+    <div className="container home">
         <h1>Hello!</h1>
         <p>
             Coming soon

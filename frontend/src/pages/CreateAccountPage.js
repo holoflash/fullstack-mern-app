@@ -25,8 +25,8 @@ const CreateAccountPage = () => {
     }
 
     return (
-        <div className='container sign-up'>
-            <h1>SIGN UP</h1>
+        <div className='container create-account'>
+            <h1>CREATE ACCOUNT</h1>
             {error && <p className='error'>{error}</p>}
             <input
                 placeholder='Your email address'
