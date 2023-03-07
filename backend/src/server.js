@@ -69,7 +69,7 @@ app.post('/api/playlists/:name/suggestions', async (req, res) => {
     const id = new ObjectId();
 
     await db.collection('playlists').updateOne({ [`${name}.suggestions`]: { $exists: true } }, {
-        $push: { [`${name}.suggestions`]: { _id: id, suggestion: suggestion, user, upvotes: 0 } },
+        $push: { [`${name}.suggestions`]: { _id: id, suggestion: suggestion, postedBy: user.email, upvotes: 0 } },
     });
 
     const result = await db.collection('playlists').findOne({ [`${name}.suggestions._id`]: new ObjectId(id) });
@@ -100,11 +100,12 @@ app.delete('/api/playlists/:name/suggestions/:id', async (req, res) => {
 //Upvote a suggestion
 app.put('/api/playlists/:name/suggestions/:id/upvote', async (req, res) => {
     const { name, id } = req.params;
+    const { user } = req.body;
 
     await db.collection('playlists').updateOne({ [`${name}.suggestions._id`]: new ObjectId(id) }, {
         $inc: { [`${name}.suggestions.$.upvotes`]: 1 },
+        $push: { [`${name}.suggestions.$.upvotedBy`]: user.email },
     });
-
     const result = await db.collection('playlists').findOne({ [`${name}.suggestions._id`]: new ObjectId(id) });
     if (result) {
         res.json(result[name].suggestions);
@@ -117,9 +118,11 @@ app.put('/api/playlists/:name/suggestions/:id/upvote', async (req, res) => {
 //Downvote a suggestion
 app.put('/api/playlists/:name/suggestions/:id/downvote', async (req, res) => {
     const { name, id } = req.params;
+    const { user } = req.body;
 
     await db.collection('playlists').updateOne({ [`${name}.suggestions._id`]: new ObjectId(id) }, {
         $inc: { [`${name}.suggestions.$.upvotes`]: -1 },
+        $push: { [`${name}.suggestions.$.downvotedBy`]: user.email },
     });
 
     const result = await db.collection('playlists').findOne({ [`${name}.suggestions._id`]: new ObjectId(id) });

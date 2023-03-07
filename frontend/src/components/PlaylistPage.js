@@ -9,7 +9,6 @@ const PlaylistPage = ({ playlistHeader, name, playlistDescription, playlistUrl, 
     const [suggestions, setSuggestions] = useState([]);
     const [suggestionText, setSuggestionText] = useState('');
     const { user, isLoading } = useUser();
-    const userName = user.email.substring(0, user.email.indexOf('@'));
 
     useEffect(() => {
         const fetchSuggestions = async () => {
@@ -26,14 +25,18 @@ const PlaylistPage = ({ playlistHeader, name, playlistDescription, playlistUrl, 
     const addUpvote = async ({ suggestion }) => {
         const token = user && await user.getIdToken();
         const headers = token ? { authtoken: token } : {};
-        const response = await axios.put(`/api/playlists/${name}/suggestions/${suggestion._id}/upvote`, null, { headers })
+        const response = await axios.put(`/api/playlists/${name}/suggestions/${suggestion._id}/upvote`, {
+            user: user
+        }, { headers })
         setSuggestions(response.data);
     }
 
     const addDownvote = async ({ suggestion }) => {
         const token = user && await user.getIdToken();
         const headers = token ? { authtoken: token } : {};
-        const response = await axios.put(`/api/playlists/${name}/suggestions/${suggestion._id}/downvote`, null, { headers })
+        const response = await axios.put(`/api/playlists/${name}/suggestions/${suggestion._id}/downvote`, {
+            user: user
+        }, { headers })
         setSuggestions(response.data);
     }
 
@@ -42,7 +45,7 @@ const PlaylistPage = ({ playlistHeader, name, playlistDescription, playlistUrl, 
         const headers = token ? { authtoken: token } : {};
         const response = await axios.post(`/api/playlists/${name}/suggestions`, {
             suggestion: suggestionText,
-            user: userName
+            user: user
         }, {
             headers,
         });
@@ -51,7 +54,7 @@ const PlaylistPage = ({ playlistHeader, name, playlistDescription, playlistUrl, 
     }
 
     const deleteSuggestion = async ({ suggestion }) => {
-        console.log(suggestion.user)
+        console.log(suggestion.postedBy)
         const token = user && await user.getIdToken();
         const headers = token ? { authtoken: token } : {};
         const response = await axios.delete(`/api/playlists/${name}/suggestions/${suggestion._id}`, null, { headers, });
@@ -81,18 +84,17 @@ const PlaylistPage = ({ playlistHeader, name, playlistDescription, playlistUrl, 
                     </thead>
                     <tbody>
                         {suggestions.sort((a, b) => b.upvotes - a.upvotes).map((suggestion, i) => (
-                            <tr key={`${suggestion.user}_${suggestion.suggestion}`}>
+                            <tr key={`${suggestion.postedBy}_${suggestion.suggestion}`}>
                                 <td> {suggestion.upvotes}</td>
                                 <td className='suggestion-table' onClick={(event) => {
                                     event.currentTarget.firstChild.classList.toggle('hidden');
                                 }}>
                                     <div className='action-table hidden'>
                                         {user ? (
-
                                             <div className='actions'>
                                                 <button id="up" onClick={() => addUpvote({ suggestion })}>UPVOTE</button>
                                                 <button id="down" onClick={() => addDownvote({ suggestion })}>DOWNVOTE</button>
-                                                {user.email === suggestion.user
+                                                {user.email === suggestion.postedBy
                                                     ? (<button id="del" onClick={() => deleteSuggestion({ suggestion })}>X</button>)
                                                     : <div></div>}
                                             </div>
@@ -102,7 +104,7 @@ const PlaylistPage = ({ playlistHeader, name, playlistDescription, playlistUrl, 
                                     </div>
                                     {suggestion.suggestion}
                                 </td>
-                                <td>{suggestion.user.substring(0, user.email.indexOf('@'))}</td>
+                                <td>{suggestion.postedBy}</td>
                             </tr>
                         ))}
                     </tbody>
@@ -128,7 +130,7 @@ const PlaylistPage = ({ playlistHeader, name, playlistDescription, playlistUrl, 
                         />
                         <div className='input-count'>{suggestionText.length} / 50</div>
                         <button onClick={addSuggestion}>Add Suggestion</button>
-                        <p>You are posting as <strong>{userName}</strong></p>
+                        <p>You are posting as <strong>{user.email}</strong></p>
                     </div>
 
                     :
