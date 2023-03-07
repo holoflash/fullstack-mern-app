@@ -89,12 +89,10 @@ const PlaylistPage = ({ playlistHeader, name, playlistDescription, playlistUrl, 
                                     {suggestion.suggestion}
                                     {user ? (
                                         <div className='actions'>
-
                                             <button onClick={() => addUpvote({ suggestion })}>UPVOTE</button>
                                             <button onClick={() => addDownvote({ suggestion })}>DOWNVOTE</button>
                                             <button onClick={() => deleteSuggestion({ suggestion })}>X</button>
-                                        </div
-                                        >
+                                        </div>
                                     ) : (
                                         <button onClick={() => { navigate('/login', { state: { from: location.pathname } }) }}>Log in to rate</button>
                                     )}</td>

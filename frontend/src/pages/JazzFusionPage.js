@@ -1,4 +1,4 @@
-import PlaylistPage from "./PlaylistPage";
+import PlaylistPage from "../components/PlaylistPage.js";
 import JazzImg from "../assets/jazz.jpg"
 
 const JazzFusion = () => {
