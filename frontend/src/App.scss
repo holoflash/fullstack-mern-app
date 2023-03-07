@@ -150,7 +150,7 @@ table {
         background-color: #6e77ab;
     }
     #del:hover {
-        background-color: #850d15;
+        background-color: #91245e;
     }
     .suggestion-table {
         &:hover {
@@ -164,6 +164,11 @@ table {
     }
     .hidden {
         display: none;
+    }
+    .rated {
+        cursor: default;
+        outline: solid #6d597a 1px;
+        padding: 10px;
     }
 }
 

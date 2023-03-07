@@ -69,7 +69,7 @@ app.post('/api/playlists/:name/suggestions', async (req, res) => {
     const id = new ObjectId();
 
     await db.collection('playlists').updateOne({ [`${name}.suggestions`]: { $exists: true } }, {
-        $push: { [`${name}.suggestions`]: { _id: id, suggestion: suggestion, postedBy: user.email, upvotes: 0 } },
+        $push: { [`${name}.suggestions`]: { _id: id, suggestion: suggestion, postedBy: user.email, upvotes: 0, upvotedBy: [], downvotedBy: [] } },
     });
 
     const result = await db.collection('playlists').findOne({ [`${name}.suggestions._id`]: new ObjectId(id) });

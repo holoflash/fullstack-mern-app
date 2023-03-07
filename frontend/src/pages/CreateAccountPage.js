@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth'
+import enterKeySubmit from '../util/enterKeySubmit'
 
 const CreateAccountPage = () => {
     const [email, setEmail] = useState('')
@@ -29,23 +30,31 @@ const CreateAccountPage = () => {
             <h1>CREATE ACCOUNT</h1>
             {error && <p className='error'>{error}</p>}
             <input
+                required
                 placeholder='Your email address'
                 value={email}
                 onChange={(e => setEmail(e.target.value))}
+                onKeyDown={e => enterKeySubmit(e, createAccount)}
             />
             <input
+                required
                 type="password"
                 placeholder='Your password'
                 value={password}
                 onChange={(e => setPassword(e.target.value))}
+                onKeyDown={e => enterKeySubmit(e, createAccount)}
             />
             <input
+                required
                 type="password"
                 placeholder='Confirm password'
                 value={confirmPassword}
                 onChange={(e => setConfirmPassword(e.target.value))}
+                onKeyDown={e => enterKeySubmit(e, createAccount)}
             />
-            <button onClick={createAccount}>SIGN UP</button>
+            <button
+                onKeyDown={e => enterKeySubmit(e, createAccount)}
+                onClick={createAccount}>SIGN UP</button>
             <Link className="auth-link" to="/login">Already have an account? Log in here</Link>
         </div>
     )

@@ -2,6 +2,7 @@ import useUser from '../hooks/useUser';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate, useLocation } from "react-router-dom";
+import enterKeySubmit from '../util/enterKeySubmit'
 
 const PlaylistPage = ({ playlistHeader, name, playlistDescription, playlistUrl, playlistImg }) => {
     const navigate = useNavigate()
@@ -92,15 +93,16 @@ const PlaylistPage = ({ playlistHeader, name, playlistDescription, playlistUrl, 
                                     <div className='action-table hidden'>
                                         {user ? (
                                             <div className='actions'>
-                                                <button id="up" onClick={() => addUpvote({ suggestion })}>UPVOTE</button>
-                                                <button id="down" onClick={() => addDownvote({ suggestion })}>DOWNVOTE</button>
-                                                {user.email === suggestion.postedBy
-                                                    ? (<button id="del" onClick={() => deleteSuggestion({ suggestion })}>X</button>)
-                                                    : <div></div>}
-                                            </div>
-                                        ) : (
-                                            <button onClick={() => { navigate('/login', { state: { from: location.pathname } }) }}>Log in to rate</button>
-                                        )}
+                                                {!suggestion.upvotedBy.includes(user.email) || !suggestion.upvotedBy.includes(user.email)
+                                                    ? <span className='rated'>RATED</span>
+                                                    : (<>
+                                                        <button id="up" onClick={() => addUpvote({ suggestion })}>UPVOTE</button>
+                                                        <button id="down" onClick={() => addDownvote({ suggestion })}>DOWNVOTE</button>
+                                                    </>)}
+                                                {user.email === suggestion.postedBy && (<button id="del" onClick={() => deleteSuggestion({ suggestion })}>DELETE</button>)}
+                                            </div>)
+                                            : (<button onClick={() => { navigate('/login', { state: { from: location.pathname } }) }}>Log in to rate</button>
+                                            )}
                                     </div>
                                     {suggestion.suggestion}
                                 </td>
@@ -122,11 +124,7 @@ const PlaylistPage = ({ playlistHeader, name, playlistDescription, playlistUrl, 
                             maxLength={50}
                             value={suggestionText}
                             onChange={e => setSuggestionText(e.target.value)}
-                            onKeyDown={e => {
-                                if (e.key === 'Enter') {
-                                    addSuggestion();
-                                }
-                            }}
+                            onKeyDown={e => enterKeySubmit(e, addSuggestion)}
                         />
                         <div className='input-count'>{suggestionText.length} / 50</div>
                         <button onClick={addSuggestion}>Add Suggestion</button>
