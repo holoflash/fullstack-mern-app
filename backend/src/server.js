@@ -42,13 +42,17 @@ app.use(async (req, res, next) => {
 
 //Get a specific playlist
 app.get('/api/playlists/:playlist', async (req, res) => {
-    const { playlist } = req.params;
-    const result = await db.collection('playlists').findOne({ [playlist]: { $exists: true } });
+    try {
+        const { playlist } = req.params;
+        const result = await db.collection('playlists').findOne({ [playlist]: { $exists: true } });
 
-    if (result) {
-        res.json(result[playlist].suggestions);
-    } else {
-        res.status(404).json({ errorCode: 404, message: 'Playlist not found' });
+        if (result) {
+            res.json(result[playlist].suggestions);
+        } else {
+            res.status(404).json({ errorCode: 404, message: 'Playlist not found' });
+        }
+    } catch (error) {
+        res.status(500).json({ errorCode: 500, message: 'Internal server error' });
     }
 });
 
@@ -64,72 +68,89 @@ app.use((req, res, next) => {
 
 //Add a suggestion
 app.post('/api/playlists/:name/suggestions', async (req, res) => {
-    const { name } = req.params;
-    const { suggestion, user } = req.body;
-    const id = new ObjectId();
+    try {
+        const { name } = req.params;
+        const { suggestion, user } = req.body;
+        const id = new ObjectId();
 
-    await db.collection('playlists').updateOne({ [`${name}.suggestions`]: { $exists: true } }, {
-        $push: { [`${name}.suggestions`]: { _id: id, suggestion: suggestion, postedBy: user.email, upvotes: 0, upvotedBy: [], downvotedBy: [] } },
-    });
+        await db.collection('playlists').updateOne({ [`${name}.suggestions`]: { $exists: true } }, {
+            $push: { [`${name}.suggestions`]: { _id: id, suggestion: suggestion, postedBy: user.email, upvotes: 0, upvotedBy: [], downvotedBy: [] } },
+        });
 
-    const result = await db.collection('playlists').findOne({ [`${name}.suggestions._id`]: new ObjectId(id) });
-    if (result) {
-        res.json(result[name].suggestions);
-    } else {
-        res.status(404).json({ errorCode: 404, message: 'Playlist not found' });
+        const result = await db.collection('playlists').findOne({ [`${name}.suggestions._id`]: new ObjectId(id) });
+        if (result) {
+            res.json(result[name].suggestions);
+        } else {
+            res.status(404).json({ errorCode: 404, message: 'Playlist not found' });
+        }
+    } catch (error) {
+        res.status(500).json({ errorCode: 500, message: 'Internal server error' });
     }
 });
 
 //Delete a suggestion
 app.delete('/api/playlists/:name/suggestions/:id', async (req, res) => {
-    const { name, id } = req.params;
+    try {
+        const { name, id } = req.params;
 
-    const result = await db.collection('playlists').updateOne(
-        { [`${name}.suggestions._id`]: new ObjectId(id) },
-        { $pull: { [`${name}.suggestions`]: { _id: new ObjectId(id) } } }
-    );
+        const result = await db.collection('playlists').updateOne(
+            { [`${name}.suggestions._id`]: new ObjectId(id) },
+            { $pull: { [`${name}.suggestions`]: { _id: new ObjectId(id) } } }
+        );
 
-    const allSuggestions = await db.collection('playlists').findOne({ [name]: { $exists: true } });
-    if (result) {
-        res.json(allSuggestions[name].suggestions);
-    } else {
-        res.status(404).json({ errorCode: 404, message: 'Playlist not found' });
+        const allSuggestions = await db.collection('playlists').findOne({ [name]: { $exists: true } });
+        if (result) {
+            res.json(allSuggestions[name].suggestions);
+        } else {
+            res.status(404).json({ errorCode: 404, message: 'Playlist not found' });
+        }
+    } catch (error) {
+        res.status(500).json({ errorCode: 500, message: 'Internal server error' });
     }
 });
 
+
 //Upvote a suggestion
 app.put('/api/playlists/:name/suggestions/:id/upvote', async (req, res) => {
-    const { name, id } = req.params;
-    const { user } = req.body;
+    try {
+        const { name, id } = req.params;
+        const { user } = req.body;
 
-    await db.collection('playlists').updateOne({ [`${name}.suggestions._id`]: new ObjectId(id) }, {
-        $inc: { [`${name}.suggestions.$.upvotes`]: 1 },
-        $push: { [`${name}.suggestions.$.upvotedBy`]: user.email },
-    });
-    const result = await db.collection('playlists').findOne({ [`${name}.suggestions._id`]: new ObjectId(id) });
-    if (result) {
-        res.json(result[name].suggestions);
-    } else {
-        res.status(404).json({ errorCode: 404, message: 'Suggestion not found' });
+        await db.collection('playlists').updateOne({ [`${name}.suggestions._id`]: new ObjectId(id) }, {
+            $inc: { [`${name}.suggestions.$.upvotes`]: 1 },
+            $push: { [`${name}.suggestions.$.upvotedBy`]: user.email },
+        });
+        const result = await db.collection('playlists').findOne({ [`${name}.suggestions._id`]: new ObjectId(id) });
+        if (result) {
+            res.json(result[name].suggestions);
+        } else {
+            res.status(404).json({ errorCode: 404, message: 'Suggestion not found' });
+        }
+    } catch (error) {
+        res.status(500).json({ errorCode: 500, message: 'Internal server error' });
     }
 });
 
 
 //Downvote a suggestion
 app.put('/api/playlists/:name/suggestions/:id/downvote', async (req, res) => {
-    const { name, id } = req.params;
-    const { user } = req.body;
+    try {
+        const { name, id } = req.params;
+        const { user } = req.body;
 
-    await db.collection('playlists').updateOne({ [`${name}.suggestions._id`]: new ObjectId(id) }, {
-        $inc: { [`${name}.suggestions.$.upvotes`]: -1 },
-        $push: { [`${name}.suggestions.$.downvotedBy`]: user.email },
-    });
+        await db.collection('playlists').updateOne({ [`${name}.suggestions._id`]: new ObjectId(id) }, {
+            $inc: { [`${name}.suggestions.$.upvotes`]: -1 },
+            $push: { [`${name}.suggestions.$.downvotedBy`]: user.email },
+        });
 
-    const result = await db.collection('playlists').findOne({ [`${name}.suggestions._id`]: new ObjectId(id) });
-    if (result) {
-        res.json(result[name].suggestions);
-    } else {
-        res.status(404).json({ errorCode: 404, message: 'Suggestion not found' });
+        const result = await db.collection('playlists').findOne({ [`${name}.suggestions._id`]: new ObjectId(id) });
+        if (result) {
+            res.json(result[name].suggestions);
+        } else {
+            res.status(404).json({ errorCode: 404, message: 'Suggestion not found' });
+        }
+    } catch (error) {
+        res.status(500).json({ errorCode: 500, message: 'Internal server error' });
     }
 });
 
