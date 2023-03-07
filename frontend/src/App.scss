@@ -169,8 +169,18 @@ table {
         all: unset;
         padding: 10px;
     }
+    .suggestion-table {
+        &:hover {
+            cursor: pointer;
+            background-color: darken($primary-color, 2%);
+        }
+    }
     .action-table {
         padding: 20px;
+        top: 0;
+    }
+    .hidden {
+        display: none;
     }
 }
 

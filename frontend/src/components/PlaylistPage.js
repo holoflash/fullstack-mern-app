@@ -77,29 +77,32 @@ const PlaylistPage = ({ playlistHeader, name, playlistDescription, playlistUrl, 
                         <th>Votes</th>
                         <th>suggestion</th>
                         <th>user</th>
-
-
-
                     </thead>
                     <tbody>
                         {suggestions.sort((a, b) => b.upvotes - a.upvotes).map((suggestion, i) => (
                             <tr key={`${suggestion.user}_${suggestion.suggestion}`}>
                                 <td> {suggestion.upvotes}</td>
-                                <td className='action-table'>
+                                <td className='suggestion-table' onClick={(event) => {
+                                    event.currentTarget.firstChild.classList.toggle('hidden');
+                                }}>
+                                    <div className='action-table hidden'>
+                                        {user ? (
+                                            <div className='actions'>
+                                                <button onClick={() => addUpvote({ suggestion })}>UPVOTE</button>
+                                                <button onClick={() => addDownvote({ suggestion })}>DOWNVOTE</button>
+                                                <button onClick={() => deleteSuggestion({ suggestion })}>X</button>
+                                            </div>
+                                        ) : (
+                                            <button onClick={() => { navigate('/login', { state: { from: location.pathname } }) }}>Log in to rate</button>
+                                        )}
+                                    </div>
                                     {suggestion.suggestion}
-                                    {user ? (
-                                        <div className='actions'>
-                                            <button onClick={() => addUpvote({ suggestion })}>UPVOTE</button>
-                                            <button onClick={() => addDownvote({ suggestion })}>DOWNVOTE</button>
-                                            <button onClick={() => deleteSuggestion({ suggestion })}>X</button>
-                                        </div>
-                                    ) : (
-                                        <button onClick={() => { navigate('/login', { state: { from: location.pathname } }) }}>Log in to rate</button>
-                                    )}</td>
+                                </td>
                                 <td>{suggestion.user}</td>
                             </tr>
                         ))}
                     </tbody>
+
                 </table>
             }
 
