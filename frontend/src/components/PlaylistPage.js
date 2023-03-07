@@ -1,5 +1,5 @@
 import useUser from '../hooks/useUser';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate, useLocation } from "react-router-dom";
 
@@ -10,14 +10,6 @@ const PlaylistPage = ({ playlistHeader, name, playlistDescription, playlistUrl, 
     const [suggestionText, setSuggestionText] = useState('');
     const [userName, setUserName] = useState('');
     const { user, isLoading } = useUser();
-
-    const pageToView = useRef(null)
-
-    useEffect(() => {
-        if (pageToView.current) {
-            pageToView.current.scrollIntoView({ behavior: "smooth" });
-        }
-    }, [pageToView.current])
 
     useEffect(() => {
         const fetchSuggestions = async () => {
@@ -67,7 +59,7 @@ const PlaylistPage = ({ playlistHeader, name, playlistDescription, playlistUrl, 
     }
 
     return (
-        <div ref={pageToView} className='container'>
+        <div className='container'>
             <h1>{playlistHeader}</h1>
             <p>{playlistDescription}</p>
             <a href={playlistUrl}
@@ -124,11 +116,18 @@ const PlaylistPage = ({ playlistHeader, name, playlistDescription, playlistUrl, 
                             placeholder='Song - Artist'
                             maxLength={50}
                             value={suggestionText}
-                            onChange={e => setSuggestionText(e.target.value)} />
+                            onChange={e => setSuggestionText(e.target.value)}
+                            onKeyDown={e => {
+                                if (e.key === 'Enter') {
+                                    addSuggestion();
+                                }
+                            }}
+                        />
                         <div className='input-count'>{suggestionText.length} / 50</div>
                         <button onClick={addSuggestion}>Add Suggestion</button>
                         <p>You are posting as <strong>{user.email.substring(0, user.email.indexOf('@'))}</strong></p>
                     </div>
+
                     :
                     <div id="add-suggestion-form">
                         <button className='login-to-suggest' onClick={() => { navigate('/login', { state: { from: location.pathname } }) }}>Log in to add suggestion</button></div>

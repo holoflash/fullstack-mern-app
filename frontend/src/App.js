@@ -12,6 +12,7 @@ import JazzFusionPage from './pages/JazzFusionPage'
 function App() {
   return (
     <BrowserRouter>
+      <NavBar />
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/soundtrack_aor" element={<SoundtrackAorPage />} />
@@ -21,7 +22,6 @@ function App() {
         <Route path="/create-account" element={<CreateAccountPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
-      <NavBar />
     </BrowserRouter>
   );
 }
