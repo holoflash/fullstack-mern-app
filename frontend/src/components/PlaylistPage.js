@@ -1,7 +1,7 @@
 import useUser from '../hooks/useUser';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const PlaylistPage = ({ playlistHeader, name, playlistDescription, playlistUrl, playlistImg }) => {
     const navigate = useNavigate()
@@ -10,6 +10,14 @@ const PlaylistPage = ({ playlistHeader, name, playlistDescription, playlistUrl, 
     const [suggestionText, setSuggestionText] = useState('');
     const [userName, setUserName] = useState('');
     const { user, isLoading } = useUser();
+
+    const pageToView = useRef(null)
+
+    useEffect(() => {
+        if (pageToView.current) {
+            pageToView.current.scrollIntoView({ behavior: "smooth" });
+        }
+    }, [pageToView.current])
 
     useEffect(() => {
         const fetchSuggestions = async () => {
@@ -59,7 +67,7 @@ const PlaylistPage = ({ playlistHeader, name, playlistDescription, playlistUrl, 
     }
 
     return (
-        <div className='container'>
+        <div ref={pageToView} className='container'>
             <h1>{playlistHeader}</h1>
             <p>{playlistDescription}</p>
             <a href={playlistUrl}
@@ -70,13 +78,14 @@ const PlaylistPage = ({ playlistHeader, name, playlistDescription, playlistUrl, 
                 />
             </a>
 
-
             {suggestions.length !== 0 &&
                 <table>
                     <thead>
-                        <th>Votes</th>
-                        <th>suggestion</th>
-                        <th>user</th>
+                        <tr>
+                            <th>Votes</th>
+                            <th>suggestion</th>
+                            <th>user</th>
+                        </tr>
                     </thead>
                     <tbody>
                         {suggestions.sort((a, b) => b.upvotes - a.upvotes).map((suggestion, i) => (
@@ -88,9 +97,9 @@ const PlaylistPage = ({ playlistHeader, name, playlistDescription, playlistUrl, 
                                     <div className='action-table hidden'>
                                         {user ? (
                                             <div className='actions'>
-                                                <button onClick={() => addUpvote({ suggestion })}>UPVOTE</button>
-                                                <button onClick={() => addDownvote({ suggestion })}>DOWNVOTE</button>
-                                                <button onClick={() => deleteSuggestion({ suggestion })}>X</button>
+                                                <button id="up" onClick={() => addUpvote({ suggestion })}>UPVOTE</button>
+                                                <button id="down" onClick={() => addDownvote({ suggestion })}>DOWNVOTE</button>
+                                                <button id="del" onClick={() => deleteSuggestion({ suggestion })}>X</button>
                                             </div>
                                         ) : (
                                             <button onClick={() => { navigate('/login', { state: { from: location.pathname } }) }}>Log in to rate</button>
@@ -102,7 +111,6 @@ const PlaylistPage = ({ playlistHeader, name, playlistDescription, playlistUrl, 
                             </tr>
                         ))}
                     </tbody>
-
                 </table>
             }
 
@@ -113,8 +121,7 @@ const PlaylistPage = ({ playlistHeader, name, playlistDescription, playlistUrl, 
                         <input
                             required
                             type="text"
-                            placeholder='Song Title - Artist'
-                            pattern="[a-zA-Z0-9\-'/\s]"
+                            placeholder='Song - Artist'
                             maxLength={50}
                             value={suggestionText}
                             onChange={e => setSuggestionText(e.target.value)} />
