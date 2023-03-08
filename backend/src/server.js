@@ -14,6 +14,7 @@ const credentials = JSON.parse(
     fs.readFileSync('./credentials.json')
 );
 
+
 admin.initializeApp({
     credential: admin.credential.cert(credentials),
 });
@@ -22,9 +23,16 @@ const app = express();
 app.use(express.json());
 app.use(express.static(path.join(__dirname, '../build')));
 
-app.get('/*', function (req, res) {
-    res.sendFile(path.join(__dirname, '../build/index.html'));
+// Add CORS middleware
+app.use((req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', 'https://holoflash-submissions.onrender.com/');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+    next();
 });
+
+app.get(/^(?!\/api).+/, (req, res) => {
+    res.sendFile(path.join(__dirname, '../build/index.html'));
+})
 
 app.use(async (req, res, next) => {
     const { authtoken } = req.headers;
@@ -38,7 +46,6 @@ app.use(async (req, res, next) => {
     req.user = req.user || {};
     next();
 });
-
 
 //Get a specific playlist
 app.get('/api/playlists/:playlist', async (req, res) => {
