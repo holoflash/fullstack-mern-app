@@ -63,16 +63,32 @@ nav {
         display: inline-block;
         text-transform: uppercase;
         padding-inline: 15px;
-        padding: 15px;
+        padding: 10px;
         text-decoration: none;
         color: $font-color;
         font-weight: bold;
     }
     :hover {
         background: $splash3;
+        box-shadow: 0px 0px 20px #ac82c983;
     }
     button {
         color: $primary-color;
+    }
+}
+
+input {
+    all: unset;
+    padding: 10px;
+    font-size: $maintext;
+    outline: solid $splash3 1px;
+    width: 80vw;
+    max-width: 500px;
+    background-color: white;
+    color: $primary-color;
+    &:focus {
+        box-shadow: 0px 0px 20px #ac82c983;
+        transition: border-bottom 0.3s ease;
     }
 }
 
@@ -101,14 +117,7 @@ nav {
         @include width();
         text-align: justify;
     }
-    input {
-        display: block;
-        padding: 8px;
-        border-radius: 8px;
-        font-size: $maintext;
-        border: 2px solid $splash3;
-        margin-bottom: 16px;
-    }
+
     button {
         @include width();
         @include button();
@@ -122,27 +131,33 @@ nav {
     }
 }
 
-table {
+.suggestions-container {
+    @include width();
     font-size: $maintext;
     margin-bottom: 10px;
     padding: 10px;
     border-collapse: collapse;
-    @include width();
-    th,
-    td {
+    text-align: center;
+    .th,
+    .td,
+    .suggestion-table {
         border: solid black 1px;
-        text-align: center;
-        padding: 10px;
+        margin: 10px;
     }
-    th {
+    td {
+        height: 40px;
+    }
+
+    .th {
         text-transform: uppercase;
         padding: 5px;
         background-color: #6d597a;
     }
+
     button {
-        all: unset;
-        padding: 10px;
+        max-width: calc(100% / 4);
     }
+
     #up:hover {
         background-color: #a471c6;
     }
@@ -166,51 +181,41 @@ table {
         display: none;
     }
     .rated {
+        @include button();
         cursor: default;
         outline: solid #6d597a 1px;
-        padding: 10px;
     }
 }
 
 #add-suggestion-form {
-    @include width();
-    display: grid;
-    grid-template-rows: 1fr 20% 20% 1fr;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 100px;
 
     h3 {
         font-size: 3vh;
-        grid-area: 1 / 1 / 2 / 2;
-        justify-self: center;
-    }
-    input {
-        display: block;
-        padding: 8px;
-        border-radius: 8px;
-        font-size: $maintext;
-        border: 2px solid $splash3;
-        margin-bottom: 16px;
-        grid-area: 2 / 1 / 2 / 1;
-    }
-    .input-count {
-        display: block;
-        font-size: $maintext;
-        justify-self: end;
-        grid-area: 2 / 1;
-        color: $splash3;
-        padding-right: 1vh;
-        padding-top: 1vh;
+        margin: 0;
+        margin-top: 10px;
     }
 
-    button {
-        @include width();
+    .input-count {
+        margin-bottom: 5px;
+        font-size: 10px;
+    }
+
+    .add-suggestion {
         @include button();
+        width: 80vw;
+        max-width: 500px;
         background-color: black;
     }
+
     p {
         font-size: $maintext;
         font-style: italic;
         text-align: center;
-        grid-area: 3 / 1 / 4 / 2;
     }
 }
 
@@ -233,7 +238,7 @@ table {
         padding: 29px;
     }
     & > * {
-        @include width();
+        width: 400px;
         margin: 10px;
     }
     a,
@@ -246,6 +251,6 @@ table {
     }
 }
 
-caption {
+.caption {
     font-style: italic;
 }

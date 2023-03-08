@@ -4,8 +4,8 @@ const NotFoundPage = () => (
     <div className="container not-found">
         <h1>404:</h1>
         <p>Page not found!</p>
-        <img src={notfound} alt="404:not found image" />
-        <caption>Hiroshi Nagai inspired "not found" page picture - Dream/Wombo</caption>
+        <img src={notfound} alt="404:not found" />
+        <p className="caption">Hiroshi Nagai inspired "not found" page picture - Dream/Wombo</p>
     </div>
 )
 

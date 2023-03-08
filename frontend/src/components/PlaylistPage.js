@@ -55,7 +55,7 @@ const PlaylistPage = ({ playlistHeader, name, playlistDescription, playlistUrl, 
     }
 
     const deleteSuggestion = async ({ suggestion }) => {
-        console.log(suggestion.postedBy)
+        if (!window.confirm("Are you sure you want to delete this suggestion? This can't not be undone.")) return
         const token = user && await user.getIdToken();
         const headers = token ? { authtoken: token } : {};
         const response = await axios.delete(`/api/playlists/${name}/suggestions/${suggestion._id}`, null, { headers, });
@@ -67,7 +67,9 @@ const PlaylistPage = ({ playlistHeader, name, playlistDescription, playlistUrl, 
             <h1>{playlistHeader}</h1>
             <p>{playlistDescription}</p>
             <a href={playlistUrl}
-                target="_blank">
+                target="_blank"
+                rel="noreferrer">
+
                 <img
                     src={playlistImg}
                     alt={playlistHeader + " artwork"}
@@ -75,38 +77,38 @@ const PlaylistPage = ({ playlistHeader, name, playlistDescription, playlistUrl, 
             </a>
 
             {suggestions.length !== 0 &&
-                <table>
+                <table className='suggestions-container'>
                     <thead>
                         <tr>
-                            <th>Votes</th>
-                            <th>suggestion</th>
-                            <th>user</th>
+                            <th className='th'>Votes</th>
+                            <th className='th'>suggestion</th>
+                            <th className='th'>user</th>
                         </tr>
                     </thead>
                     <tbody>
                         {suggestions.sort((a, b) => b.upvotes - a.upvotes).map((suggestion, i) => (
                             <tr key={`${suggestion.postedBy}_${suggestion.suggestion}`}>
-                                <td> {suggestion.upvotes}</td>
+                                <td className='td'> {suggestion.upvotes}</td>
                                 <td className='suggestion-table' onClick={(event) => {
                                     event.currentTarget.firstChild.classList.toggle('hidden');
                                 }}>
                                     <div className='action-table hidden'>
                                         {user ? (
                                             <div className='actions'>
-                                                {!suggestion.upvotedBy.includes(user.email) || !suggestion.upvotedBy.includes(user.email)
+                                                {suggestion.upvotedBy.includes(user.email) || suggestion.downvotedBy.includes(user.email)
                                                     ? <span className='rated'>RATED</span>
                                                     : (<>
-                                                        <button id="up" onClick={() => addUpvote({ suggestion })}>UPVOTE</button>
-                                                        <button id="down" onClick={() => addDownvote({ suggestion })}>DOWNVOTE</button>
+                                                        <button id="up" onClick={() => addUpvote({ suggestion })}>+</button>
+                                                        <button id="down" onClick={() => addDownvote({ suggestion })}>-</button>
                                                     </>)}
-                                                {user.email === suggestion.postedBy && (<button id="del" onClick={() => deleteSuggestion({ suggestion })}>DELETE</button>)}
+                                                {user.email === suggestion.postedBy && (<button id="del" onClick={() => deleteSuggestion({ suggestion })}>del</button>)}
                                             </div>)
-                                            : (<button onClick={() => { navigate('/login', { state: { from: location.pathname } }) }}>Log in to rate</button>
+                                            : (<button className="button" onClick={() => { navigate('/login', { state: { from: location.pathname } }) }}>Log in to rate</button>
                                             )}
                                     </div>
                                     {suggestion.suggestion}
                                 </td>
-                                <td>{suggestion.postedBy}</td>
+                                <td className='td'>{suggestion.postedBy}</td>
                             </tr>
                         ))}
                     </tbody>
@@ -117,6 +119,7 @@ const PlaylistPage = ({ playlistHeader, name, playlistDescription, playlistUrl, 
                 user ?
                     <div id="add-suggestion-form">
                         <h3>Suggest a song</h3>
+                        <div className='input-count'>{suggestionText.length} / 50</div>
                         <input
                             required
                             type="text"
@@ -126,9 +129,8 @@ const PlaylistPage = ({ playlistHeader, name, playlistDescription, playlistUrl, 
                             onChange={e => setSuggestionText(e.target.value)}
                             onKeyDown={e => enterKeySubmit(e, addSuggestion)}
                         />
-                        <div className='input-count'>{suggestionText.length} / 50</div>
-                        <button onClick={addSuggestion}>Add Suggestion</button>
-                        <p>You are posting as <strong>{user.email}</strong></p>
+                        <button className='add-suggestion' onClick={addSuggestion}>Add Suggestion</button>
+                        {user && <p>You are posting as <strong>{user.email}</strong></p>}
                     </div>
 
                     :
