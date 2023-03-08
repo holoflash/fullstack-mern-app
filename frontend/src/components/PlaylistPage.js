@@ -80,7 +80,7 @@ const PlaylistPage = ({ playlistHeader, name, playlistDescription, playlistUrl, 
                 <table className='suggestions-container'>
                     <thead>
                         <tr>
-                            <th className='th'>Votes</th>
+                            <th className='th'>Rating</th>
                             <th className='th'>suggestion</th>
                             <th className='th'>user</th>
                         </tr>
@@ -96,10 +96,10 @@ const PlaylistPage = ({ playlistHeader, name, playlistDescription, playlistUrl, 
                                         {user ? (
                                             <div className='actions'>
                                                 {suggestion.upvotedBy.includes(user.email) || suggestion.downvotedBy.includes(user.email)
-                                                    ? <span className='rated'>RATED</span>
+                                                    ? <button className='rated'>Rated</button>
                                                     : (<>
-                                                        <button id="up" onClick={() => addUpvote({ suggestion })}>+</button>
-                                                        <button id="down" onClick={() => addDownvote({ suggestion })}>-</button>
+                                                        <button id="up" onClick={() => addUpvote({ suggestion })}>+1</button>
+                                                        <button id="down" onClick={() => addDownvote({ suggestion })}>-1</button>
                                                     </>)}
                                                 {user.email === suggestion.postedBy && (<button id="del" onClick={() => deleteSuggestion({ suggestion })}>del</button>)}
                                             </div>)
