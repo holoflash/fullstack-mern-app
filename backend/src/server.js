@@ -23,13 +23,6 @@ const app = express();
 app.use(express.json());
 app.use(express.static(path.join(__dirname, '../build')));
 
-// Add CORS middleware
-app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', 'https://holoflash-submissions.onrender.com/');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-    next();
-});
-
 app.get(/^(?!\/api).+/, (req, res) => {
     res.sendFile(path.join(__dirname, '../build/index.html'));
 })
