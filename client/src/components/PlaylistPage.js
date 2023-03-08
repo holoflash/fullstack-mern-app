@@ -14,8 +14,8 @@ const PlaylistPage = ({ playlistHeader, name, playlistDescription, playlistUrl, 
     useEffect(() => {
         const fetchSuggestions = async () => {
             const token = user && await user.getIdToken();
-            const headers = token ? { Authorization: `Bearer ${token}` } : {};
-            const response = await axios.get(`https://holoflash-backend.onrender.com/api/playlists/${name}`, { headers });
+            const headers = token ? { authtoken: token } : {};
+            const response = await axios.get(`/api/playlists/${name}`, { headers });
             const newSuggestions = response.data;
             setSuggestions(newSuggestions);
         }
@@ -25,8 +25,8 @@ const PlaylistPage = ({ playlistHeader, name, playlistDescription, playlistUrl, 
 
     const addUpvote = async ({ suggestion }) => {
         const token = user && await user.getIdToken();
-        const headers = token ? { Authorization: `Bearer ${token}` } : {};
-        const response = await axios.put(`https://holoflash-backend.onrender.com/api/playlists/${name}/suggestions/${suggestion._id}/upvote`, {
+        const headers = token ? { authtoken: token } : {};
+        const response = await axios.put(`/api/playlists/${name}/suggestions/${suggestion._id}/upvote`, {
             user: user
         }, { headers })
         setSuggestions(response.data);
@@ -34,8 +34,8 @@ const PlaylistPage = ({ playlistHeader, name, playlistDescription, playlistUrl, 
 
     const addDownvote = async ({ suggestion }) => {
         const token = user && await user.getIdToken();
-        const headers = token ? { Authorization: `Bearer ${token}` } : {};
-        const response = await axios.put(`https://holoflash-backend.onrender.com/api/playlists/${name}/suggestions/${suggestion._id}/downvote`, {
+        const headers = token ? { authtoken: token } : {};
+        const response = await axios.put(`/api/playlists/${name}/suggestions/${suggestion._id}/downvote`, {
             user: user
         }, { headers })
         setSuggestions(response.data);
@@ -43,8 +43,8 @@ const PlaylistPage = ({ playlistHeader, name, playlistDescription, playlistUrl, 
 
     const addSuggestion = async () => {
         const token = user && await user.getIdToken();
-        const headers = token ? { Authorization: `Bearer ${token}` } : {};
-        const response = await axios.post(`https://holoflash-backend.onrender.com/api/playlists/${name}/suggestions`, {
+        const headers = token ? { authtoken: token } : {};
+        const response = await axios.post(`/api/playlists/${name}/suggestions`, {
             suggestion: suggestionText,
             user: user
         }, {
@@ -55,10 +55,10 @@ const PlaylistPage = ({ playlistHeader, name, playlistDescription, playlistUrl, 
     }
 
     const deleteSuggestion = async ({ suggestion }) => {
-        if (!window.confirm("Are you sure you want to delete this suggestion? This cannot be undone.")) return
+        if (!window.confirm("Are you sure you want to delete this suggestion? This can't not be undone.")) return
         const token = user && await user.getIdToken();
-        const headers = token ? { Authorization: `Bearer ${token}` } : {};
-        const response = await axios.delete(`https://holoflash-backend.onrender.com/api/playlists/${name}/suggestions/${suggestion._id}`, { headers });
+        const headers = token ? { authtoken: token } : {};
+        const response = await axios.delete(`/api/playlists/${name}/suggestions/${suggestion._id}`, null, { headers, });
         setSuggestions(response.data);
     }
 
