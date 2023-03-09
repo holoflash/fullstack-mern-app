@@ -74,9 +74,9 @@ const HomePage = () => {
                 <ul>
                     <li>Have two distinct user types - Curator & User</li>
                     <li>Restructure the backend to allow multiple curators</li>
-                    <li>Allow Users to log in with Spotify</li>
+                    <li>Allow Users to log in using Spotify</li>
                     <li>Allow Users to search for songs to submit using the Spotify API</li>
-                    <li>Use the Spotify API to allow Curators to add the playlists they want to be on the platform</li>
+                    <li>Use the Spotify API to allow Curators to add the playlists they want to have on the platform</li>
                     <li>Implement Curator options to automatically add songs to their playlists based on song rating thresholds.</li>
                 </ul>
             </details>
