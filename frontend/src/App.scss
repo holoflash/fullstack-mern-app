@@ -81,9 +81,13 @@ nav {
     button {
         color: $primary-color;
     }
+    .about {
+        text-transform: lowercase;
+    }
 }
 
 input {
+    border-radius: 5px;
     all: unset;
     padding: 10px;
     font-size: $maintext;
@@ -100,9 +104,10 @@ input {
 
 .container {
     height: max-content;
-    width: 100vw;
     @include flex-col();
-    h1 {
+    h1,
+    h2,
+    h3 {
         margin: 0;
         font-size: min(50px, 10vw);
         color: $font-color;
@@ -234,11 +239,12 @@ input {
 .create-account,
 .home,
 .not-found {
+    @include flex-col();
     h1 {
         padding: 29px;
     }
     & > * {
-        width: 400px;
+        @include width();
         margin: 10px;
     }
     a,
@@ -258,4 +264,40 @@ input {
 .loading-text {
     color: #355070;
     font-size: 100vh;
+}
+
+.home {
+    .backend-tree {
+        background: linear-gradient($splash3, $primary-color);
+    }
+    img {
+        all: unset;
+        width: 60px;
+    }
+    a,
+    summary {
+        cursor: pointer;
+        color: #b77edc;
+        &:hover {
+            color: orange;
+        }
+    }
+    summary {
+        margin: 10px;
+    }
+    details {
+        outline: solid #b77edc 1px;
+        background-color: rgb(0, 0, 0);
+    }
+    h4 {
+        font-size: 20px;
+        color: orange;
+    }
+    h5 {
+        font-size: 16px;
+        color: orange;
+    }
+    p {
+        text-align: justify;
+    }
 }

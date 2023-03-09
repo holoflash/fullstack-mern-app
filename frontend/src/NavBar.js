@@ -13,7 +13,7 @@ const NavBar = () => {
                 ? <button className="login" onClick={() => { signOut(getAuth()) }}>LOG OUT</button>
                 : <button className="login" onClick={() => { navigate('/login', { state: { from: location.pathname } }) }}>LOG IN</button>
             }
-            <Link to="/">⌂</Link>
+            <Link className="about" to="/">i</Link>
             <Link to="/soundtrack_aor">SOUNDTRACK AOR</Link>
             <Link to="/popwave">popwave</Link>
             <Link to="/80s_90s_jazz_fusion">80s & 90s Jazz Fusion/Smooth Jazz</Link>
