@@ -73,6 +73,7 @@ const PlaylistPage = ({ playlistHeader, name, playlistDescription, playlistUrl, 
                 <img
                     src={playlistImg}
                     alt={playlistHeader + " artwork"}
+                    loading="lazy"
                 />
             </a>
 

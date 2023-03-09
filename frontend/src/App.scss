@@ -34,7 +34,7 @@ button {
     font-weight: 900;
     &:hover {
         background-color: $splash3;
-        box-shadow: 0px 0px 20px #ab82c953;
+        box-shadow: 0px 0px 18px #ab82c939;
         outline: solid $primary-color 1px;
     }
 }
@@ -174,10 +174,6 @@ input {
 
     .suggestion-table {
         margin: 0;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
         padding: 20px;
         &:hover {
             cursor: pointer;
