@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth'
 import enterKeySubmit from '../util/enterKeySubmit'
 
@@ -8,8 +8,8 @@ const CreateAccountPage = () => {
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
     const [error, setError] = useState('')
-
     const navigate = useNavigate();
+    const location = useLocation()
 
     const createAccount = async () => {
         try {
@@ -18,7 +18,11 @@ const CreateAccountPage = () => {
                 return
             }
             await createUserWithEmailAndPassword(getAuth(), email, password)
-            navigate('/articles')
+            if (location.state && location.state.from) {
+                navigate(location.state.from)
+            } else {
+                navigate('/')
+            }
         }
         catch (e) {
             setError(e.message);
