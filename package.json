@@ -8,5 +8,8 @@
     "deploy": "cd frontend && npm run build && cd ../backend && rm -rf build && cp -r ../frontend/build build/ && npm install"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "react-scripts": "^5.0.1"
+  }
 }
