@@ -1,5 +1,5 @@
 import PlaylistPage from "../components/PlaylistPage.js";
-import SoundtrackImg from "../assets/soundtrack.jpg"
+import SoundtrackImg from "../assets/soundtrack.png"
 
 const SoundtrackAor = () => {
 

@@ -63,7 +63,7 @@ const PlaylistPage = ({ playlistHeader, name, playlistDescription, playlistUrl, 
     }
 
     return (
-        <div className='container'>
+        < div className='container' >
             <h1>{playlistHeader}</h1>
             <p>{playlistDescription}</p>
             <a href={playlistUrl}
@@ -73,7 +73,6 @@ const PlaylistPage = ({ playlistHeader, name, playlistDescription, playlistUrl, 
                 <img
                     src={playlistImg}
                     alt={playlistHeader + " artwork"}
-                    loading="lazy"
                 />
             </a>
 
@@ -116,27 +115,26 @@ const PlaylistPage = ({ playlistHeader, name, playlistDescription, playlistUrl, 
                 </table>
             }
 
-            {
-                user ?
-                    <div id="add-suggestion-form">
-                        <h3>Suggest a song</h3>
-                        <div className='input-count'>{suggestionText.length} / 50</div>
-                        <input
-                            required
-                            type="text"
-                            placeholder='Song - Artist'
-                            maxLength={50}
-                            value={suggestionText}
-                            onChange={e => setSuggestionText(e.target.value)}
-                            onKeyDown={e => enterKeySubmit(e, addSuggestion)}
-                        />
-                        <button className='add-suggestion' onClick={addSuggestion}>Add Suggestion</button>
-                        {user && <p>You are posting as <strong>{user.email}</strong></p>}
-                    </div>
+            {user ?
+                <div id="add-suggestion-form">
+                    <h3>Suggest a song</h3>
+                    <div className='input-count'>{suggestionText.length} / 50</div>
+                    <input
+                        required
+                        type="text"
+                        placeholder='Song - Artist'
+                        maxLength={50}
+                        value={suggestionText}
+                        onChange={e => setSuggestionText(e.target.value)}
+                        onKeyDown={e => enterKeySubmit(e, addSuggestion)}
+                    />
+                    <button className='add-suggestion' onClick={addSuggestion}>Add Suggestion</button>
+                    {user && <p>You are posting as <strong>{user.email}</strong></p>}
+                </div>
 
-                    :
-                    <div id="add-suggestion-form">
-                        <button className='login-to-suggest' onClick={() => { navigate('/login', { state: { from: location.pathname } }) }}>Log in to add suggestion</button></div>
+                :
+                <div id="add-suggestion-form">
+                    <button className='login-to-suggest' onClick={() => { navigate('/login', { state: { from: location.pathname } }) }}>Log in to add suggestion</button></div>
             }
         </div >
     );

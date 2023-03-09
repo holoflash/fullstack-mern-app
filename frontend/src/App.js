@@ -7,11 +7,13 @@ import LoginPage from './pages/LoginPage';
 import CreateAccountPage from './pages/CreateAccountPage';
 import SoundtrackAorPage from './pages/SoundtrackAorPage'
 import PopwavePage from './pages/PopwavePage';
-import JazzFusionPage from './pages/JazzFusionPage'
+import JazzFusionPage from './pages/JazzFusionPage';
+import ImagePreload from './util/imagePreload';
 
 function App() {
   return (
     <BrowserRouter>
+      <ImagePreload />
       <NavBar />
       <Routes>
         <Route path="/" element={<HomePage />} />

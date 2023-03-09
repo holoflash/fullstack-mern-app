@@ -1,5 +1,5 @@
 import PlaylistPage from "../components/PlaylistPage.js";
-import PopwaveImg from "../assets/popwave.jpg"
+import PopwaveImg from "../assets/popwave.png"
 
 const Popwave = () => {
     return (
