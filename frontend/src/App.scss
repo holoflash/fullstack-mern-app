@@ -140,12 +140,20 @@ input {
     margin-bottom: 10px;
     padding: 10px;
     border-collapse: collapse;
+
     .th,
     .td,
     .suggestion-table {
-        border-block: solid $splash3 1px;
+        border: solid $splash3 1px;
         margin: 10px;
+        padding: 10px;
     }
+
+    .suggestion-table:hover {
+        cursor: pointer;
+        background-color: lighten($primary-color, 2%);
+    }
+
     td {
         text-align: center;
     }
@@ -172,21 +180,6 @@ input {
         background-color: rgb(200, 20, 0);
     }
 
-    .suggestion-table {
-        margin: 0;
-        padding: 20px;
-        &:hover {
-            cursor: pointer;
-            background-color: lighten($primary-color, 2%);
-        }
-    }
-    .action-table {
-        display: flex;
-        justify-content: space-around;
-        align-items: center;
-        border-bottom: solid $splash3 1px;
-        width: fit-content;
-    }
     .hidden {
         display: none;
     }
