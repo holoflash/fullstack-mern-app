@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
-import { getAuth, onAuthStateChanged } from 'firebase/auth'
+import { getAuth, onAuthStateChanged, User } from 'firebase/auth'
 
 const useUser = () => {
-    const [user, setUser] = useState(null)
+    const [user, setUser] = useState<User | null>(null)
     const [isLoading, setIsLoading] = useState(true)
 
     useEffect(() => {
